@@ -9,6 +9,7 @@ from aiogram.filters import CommandStart
 from aiogram.types import Message
 
 from keyboards.user_keyboards import main_menu_keyboard
+from messages.user_messages import main_menu_messages
 
 config = configparser.ConfigParser()
 config.read("setting/config.ini")
@@ -20,11 +21,14 @@ dp = Dispatcher()
 @dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
     main_menu_key = main_menu_keyboard()
-    await message.answer(text="Hello!", reply_markup=main_menu_key)
+    await message.answer(text=main_menu_messages,
+                         reply_markup=main_menu_key,
+                         disable_web_page_preview=True,
+                         parse_mode="HTML")
 
 
 async def main() -> None:
-    bot = Bot(BOT_TOKEN, parse_mode=ParseMode.HTML)
+    bot = Bot(BOT_TOKEN)
     await dp.start_polling(bot)
 
 
