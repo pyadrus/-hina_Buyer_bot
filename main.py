@@ -4,8 +4,8 @@ import logging
 import sys
 
 from aiogram import Bot, Dispatcher
-from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
+from aiogram.types import FSInputFile
 from aiogram.types import Message
 
 from keyboards.user_keyboards import main_menu_keyboard
@@ -21,10 +21,11 @@ dp = Dispatcher()
 @dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
     main_menu_key = main_menu_keyboard()
-    await message.answer(text=main_menu_messages,
-                         reply_markup=main_menu_key,
-                         disable_web_page_preview=True,
-                         parse_mode="HTML")
+
+    document = FSInputFile('messages/image/1.png')
+    await message.answer_photo(photo=document, caption=main_menu_messages,
+                               reply_markup=main_menu_key,
+                               parse_mode="HTML")
 
 
 async def main() -> None:
