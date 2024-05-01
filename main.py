@@ -1,34 +1,30 @@
 import asyncio
+import configparser
 import logging
 import sys
-from os import getenv
 
-from aiogram import Bot, Dispatcher, types
+from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
 from aiogram.types import Message
-from aiogram.utils.markdown import hbold
 
-TOKEN = getenv("BOT_TOKEN")
+from keyboards.user_keyboards import main_menu_keyboard
+
+config = configparser.ConfigParser()
+config.read("setting/config.ini")
+BOT_TOKEN = config["BOT_TOKEN"]["BOT_TOKEN"]
 
 dp = Dispatcher()
 
 
 @dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
-    await message.answer(f"Hello, {hbold(message.from_user.full_name)}!")
-
-
-@dp.message()
-async def echo_handler(message: types.Message) -> None:
-    try:
-        await message.send_copy(chat_id=message.chat.id)
-    except TypeError:
-        await message.answer("Nice try!")
+    main_menu_key = main_menu_keyboard()
+    await message.answer(text="Hello!", reply_markup=main_menu_key)
 
 
 async def main() -> None:
-    bot = Bot(TOKEN, parse_mode=ParseMode.HTML)
+    bot = Bot(BOT_TOKEN, parse_mode=ParseMode.HTML)
     await dp.start_polling(bot)
 
 
