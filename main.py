@@ -19,6 +19,14 @@ config.read("setting/config.ini")
 BOT_TOKEN = config["BOT_TOKEN"]["BOT_TOKEN"]
 
 dp = Dispatcher()
+ADMIN_USER_ID = 535185511
+
+router = Router()
+dp.include_router(router)
+
+
+class Form(StatesGroup):
+    text = State()
 
 
 # Загрузка информации из JSON-файла
@@ -32,16 +40,6 @@ def load_bot_info():
 def save_bot_info(data):
     with open("messages/main_menu_messages.json", 'w', encoding='utf-8') as json_file:
         json.dump(data, json_file, ensure_ascii=False, indent=4)
-
-
-ADMIN_USER_ID = 535185511
-
-router = Router()
-dp.include_router(router)
-
-
-class Form(StatesGroup):
-    text = State()
 
 
 # Обработчик команды /edit (только для админа)
