@@ -21,5 +21,31 @@ def main_menu_keyboard() -> InlineKeyboardMarkup:
     return main_menu_key
 
 
+def services_and_prices_keyboard() -> InlineKeyboardMarkup:
+    """Клавиатура с услугами и ценами"""
+    rows = [
+        [InlineKeyboardButton(text="Услуга подбора товара аналитиком для продажи на МП",
+                              callback_data="product_search")],
+        [InlineKeyboardButton(text="Услуга Выкупа товаров", callback_data="warranty_service")],
+        [InlineKeyboardButton(text="Услуга Поиска товаров (производителей в Китае)", callback_data="search_in_china")],
+        [InlineKeyboardButton(text="Доставка товаров из Китая", callback_data="delivery_in_china")],
+        [InlineKeyboardButton(text="Какие платежи меня ожидают?", callback_data="payment_options")],
+        [InlineKeyboardButton(text="Как совершается оплата?", callback_data="payment_process")],
+        [InlineKeyboardButton(text="↩️Главное меню", callback_data="main_menu")],
+    ]
+    main_menu_key = InlineKeyboardMarkup(inline_keyboard=rows)
+    return main_menu_key
+
+
+def selection_goods_keyboard() -> InlineKeyboardMarkup:
+    """Клавиатура выбора товара"""
+    rows = [
+        [InlineKeyboardButton(text='Назад к услугам', callback_data="services_and_prices")],
+        [InlineKeyboardButton(text='↩️Главное меню', callback_data="main_menu")],
+    ]
+    main_menu_key = InlineKeyboardMarkup(inline_keyboard=rows)
+    return main_menu_key
+
+
 if __name__ == '__main__':
     main_menu_keyboard()
