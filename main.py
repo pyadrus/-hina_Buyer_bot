@@ -6,6 +6,7 @@ from handlers.delivery_goods_from_china_handlers import delivery_goods_from_chin
 from handlers.goods_redemption_service_handlers import goods_redemption_service_handlers_register_message_handler
 from handlers.how_payment_made_handlers import how_payment_made_handlers_register_message_handler
 from handlers.main_menu_handlers import main_menu_register_message_handler
+from handlers.order_form_handlers import order_form_handlers_handlers_register_message_handler
 from handlers.product_search_service_handlers import product_search_service_handlers_register_message_handler
 from handlers.selection_goods_analyst_sale_marketplaces_handlers import \
     selection_goods_analyst_sale_marketplaces_register_message_handler
@@ -23,6 +24,7 @@ async def main() -> None:
     goods_redemption_service_handlers_register_message_handler()
     product_search_service_handlers_register_message_handler()
     how_payment_made_handlers_register_message_handler()
+    order_form_handlers_handlers_register_message_handler()
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
