@@ -1,7 +1,6 @@
 import json
 
 from aiogram import types, F
-from aiogram.types import FSInputFile, InputMediaPhoto
 from loguru import logger
 
 from keyboards.user_keyboards import selection_goods_keyboard

@@ -3,7 +3,7 @@ import json
 from aiogram import types, F
 from loguru import logger
 
-from keyboards.user_keyboards import selection_goods_keyboard, tapes_packing_keyboard_back
+from keyboards.user_keyboards import tapes_packing_keyboard_back
 from system.dispatcher import bot
 from system.dispatcher import dp
 from system.dispatcher import router
