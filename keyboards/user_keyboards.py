@@ -8,7 +8,7 @@ def main_menu_keyboard() -> InlineKeyboardMarkup:
          InlineKeyboardButton(text='🗒 Бланк заказа', callback_data="order_form")],
         [InlineKeyboardButton(text='🛍 Самовыкуп', callback_data="self_purchase")],
         [
-            InlineKeyboardButton(text='📦 Виды упаковки', callback_data="types_packaging"),
+            InlineKeyboardButton(text='📦 Виды упаковки', callback_data="types_packaging_handlers"),
             InlineKeyboardButton(text='💌 Отзывы', callback_data="reviews"),
         ],
         [InlineKeyboardButton(text='📚 Полезная информация', callback_data="useful_information")],
@@ -48,6 +48,29 @@ def selection_goods_keyboard() -> InlineKeyboardMarkup:
     """Клавиатура выбора товара"""
     rows = [
         [InlineKeyboardButton(text='Назад к услугам', callback_data="services_and_prices")],
+        [InlineKeyboardButton(text='↩️Главное меню', callback_data="main_menu")],
+    ]
+    main_menu_key = InlineKeyboardMarkup(inline_keyboard=rows)
+    return main_menu_key
+
+
+def types_packaging_keyboard() -> InlineKeyboardMarkup:
+    rows = [
+        [InlineKeyboardButton(text="Мешок + скотч", callback_data="bag_tape")],
+        [InlineKeyboardButton(text="Коробка + мешок + скотч", callback_data="box_bag_tape")],
+        [InlineKeyboardButton(text="Деревянная обрешетка + мешок + скотч", callback_data="wooden_sheathing_bag_tape")],
+        [InlineKeyboardButton(text="Картонные уголки + мешок + скотч", callback_data="cardboard_corners_bag_tape")],
+        [InlineKeyboardButton(text="Паллет в обрешетке", callback_data="pallet_crate")],
+        [InlineKeyboardButton(text="Паллет с глухим деревянным коробом", callback_data="pallet_with_solid_wooden_box")],
+        [InlineKeyboardButton(text="↩️Главное меню", callback_data="main_menu")],
+    ]
+    main_menu_key = InlineKeyboardMarkup(inline_keyboard=rows)
+    return main_menu_key
+
+
+def tapes_packing_keyboard_back() -> InlineKeyboardMarkup:
+    rows = [
+        [InlineKeyboardButton(text='Назад к видам упаковки', callback_data="types_packaging_handlers")],
         [InlineKeyboardButton(text='↩️Главное меню', callback_data="main_menu")],
     ]
     main_menu_key = InlineKeyboardMarkup(inline_keyboard=rows)

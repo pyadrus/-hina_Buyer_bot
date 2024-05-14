@@ -13,6 +13,16 @@ from handlers.selection_goods_analyst_sale_marketplaces_handlers import \
     selection_goods_analyst_sale_marketplaces_register_message_handler
 from handlers.self_redemption_handlers import self_redemption_handlers_register_message_handler
 from handlers.services_and_prices_handlers import services_and_prices_register_message_handler
+from handlers.types_packaging_handlers.bag_tape_handlers import bag_tape_handlers_register_message_handler
+from handlers.types_packaging_handlers.box_bag_tape_handlers import box_bag_tape_handlers_register_message_handler
+from handlers.types_packaging_handlers.cardboard_corners_bag_tape_handlers import \
+    cardboard_corners_bag_tape_handlers_register_message_handler
+from handlers.types_packaging_handlers.pallet_crate_handlers import pallet_crate_handlers_register_message_handler
+from handlers.types_packaging_handlers.pallet_with_solid_wooden_box_handlers import \
+    pallet_with_solid_wooden_box_handlers_register_message_handler
+from handlers.types_packaging_handlers.types_packaging_handlers import types_packaging_handlers_register_message_handler
+from handlers.types_packaging_handlers.wooden_sheathing_bag_tape_handlers import \
+    wooden_sheathing_bag_tape_handlers_register_message_handler
 from system.dispatcher import dp, bot
 
 
@@ -29,6 +39,13 @@ async def main() -> None:
     order_form_handlers_handlers_register_message_handler()
     payments_await_handlers_register_message_handler()
     self_redemption_handlers_register_message_handler()
+    types_packaging_handlers_register_message_handler()
+    bag_tape_handlers_register_message_handler()
+    box_bag_tape_handlers_register_message_handler()
+    wooden_sheathing_bag_tape_handlers_register_message_handler()
+    cardboard_corners_bag_tape_handlers_register_message_handler()
+    pallet_crate_handlers_register_message_handler()
+    pallet_with_solid_wooden_box_handlers_register_message_handler()
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
