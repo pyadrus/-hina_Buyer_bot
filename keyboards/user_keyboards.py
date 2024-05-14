@@ -5,7 +5,7 @@ def main_menu_keyboard() -> InlineKeyboardMarkup:
     """Клавиатура главного меню"""
     rows = [
         [InlineKeyboardButton(text="⭐️ Услуги и цены", callback_data="services_and_prices"),
-        InlineKeyboardButton(text='🗒 Бланк заказа', callback_data="order_form")],
+         InlineKeyboardButton(text='🗒 Бланк заказа', callback_data="order_form")],
         [InlineKeyboardButton(text='🛍 Самовыкуп', callback_data="self_purchase")],
         [
             InlineKeyboardButton(text='📦 Виды упаковки', callback_data="types_packaging"),
