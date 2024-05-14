@@ -4,7 +4,7 @@ from aiogram import types, F
 from aiogram.types import FSInputFile, InputMediaPhoto
 from loguru import logger
 
-from keyboards.user_keyboards import selection_goods_keyboard
+from keyboards.user_keyboards import main_menu_selection_keyboard
 from system.dispatcher import bot
 from system.dispatcher import dp
 from system.dispatcher import router
@@ -20,7 +20,7 @@ def load_bot_info_services_and_prices():
 async def order_form_handlers_handlers(callback_query: types.CallbackQuery):
     logger.debug(callback_query)
     logger.debug(callback_query.message.message_id)
-    main_menu_key = selection_goods_keyboard()
+    main_menu_key = main_menu_selection_keyboard()
 
     data = load_bot_info_services_and_prices()
     document = FSInputFile('messages/image/1.png')

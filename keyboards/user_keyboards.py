@@ -37,6 +37,14 @@ def services_and_prices_keyboard() -> InlineKeyboardMarkup:
     return main_menu_key
 
 
+def main_menu_selection_keyboard() -> InlineKeyboardMarkup:
+    rows = [
+        [InlineKeyboardButton(text="↩️Главное меню", callback_data="main_menu")],
+    ]
+    main_menu_key = InlineKeyboardMarkup(inline_keyboard=rows)
+    return main_menu_key
+
+
 def selection_goods_keyboard() -> InlineKeyboardMarkup:
     """Клавиатура выбора товара"""
     rows = [
