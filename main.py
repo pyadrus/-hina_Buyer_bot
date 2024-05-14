@@ -9,6 +9,7 @@ from handlers.main_menu_handlers import main_menu_register_message_handler
 from handlers.order_form_handlers import order_form_handlers_handlers_register_message_handler
 from handlers.payments_await_handlers import payments_await_handlers_register_message_handler
 from handlers.product_search_service_handlers import product_search_service_handlers_register_message_handler
+from handlers.reviews_handlers.reviews_handlers import reviews_handlers_register_message_handler
 from handlers.selection_goods_analyst_sale_marketplaces_handlers import \
     selection_goods_analyst_sale_marketplaces_register_message_handler
 from handlers.self_redemption_handlers import self_redemption_handlers_register_message_handler
@@ -27,7 +28,6 @@ from system.dispatcher import dp, bot
 
 
 async def main() -> None:
-    # bot = Bot(BOT_TOKEN)
     await dp.start_polling(bot)
     services_and_prices_register_message_handler()
     main_menu_register_message_handler()
@@ -46,6 +46,7 @@ async def main() -> None:
     cardboard_corners_bag_tape_handlers_register_message_handler()
     pallet_crate_handlers_register_message_handler()
     pallet_with_solid_wooden_box_handlers_register_message_handler()
+    reviews_handlers_register_message_handler()
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)

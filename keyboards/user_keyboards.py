@@ -12,8 +12,7 @@ def main_menu_keyboard() -> InlineKeyboardMarkup:
             InlineKeyboardButton(text='💌 Отзывы', callback_data="reviews"),
         ],
         [InlineKeyboardButton(text='📚 Полезная информация', callback_data="useful_information")],
-        # [InlineKeyboardButton(text='🔄 Обновить бота', callback_data="update_bot")],
-        [InlineKeyboardButton(text='📞 Связаться с менеджером', callback_data="contact_manager")],
+        [InlineKeyboardButton(text='📞 Связаться с менеджером', url='https://t.me/ChinaaBuyer')],
     ]
 
     main_menu_key = InlineKeyboardMarkup(inline_keyboard=rows)
