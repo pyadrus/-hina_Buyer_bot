@@ -15,7 +15,7 @@ from system.dispatcher import router
 
 
 @router.callback_query(F.data == "product_search")
-async def selection_goods_analyst_sale_marketplaces_handlers(callback_query: types.CallbackQuery):
+async def handle_product_search(callback_query: types.CallbackQuery):
     logger.debug(callback_query)
     logger.debug(callback_query.message.message_id)
     main_menu_key = selection_goods_keyboard()
@@ -31,24 +31,24 @@ async def selection_goods_analyst_sale_marketplaces_handlers(callback_query: typ
                                  )
 
 
-class Formservices_product_search(StatesGroup):
-    text_product_search = State()
+class ProductSearchForm(StatesGroup):
+    product_search_text = State()
 
 
 # Обработчик команды /edit_product_search (только для админа)
 @router.message(Command("edit_product_search"))
-async def edit_product_search(message: Message, state: FSMContext):
+async def handle_edit_product_search_command(message: Message, state: FSMContext):
     """Редактирование информации: Подбор товара"""
     if message.from_user.id == ADMIN_USER_ID:
         await message.answer("Введите новый текст, используя разметку HTML.")
-        await state.set_state(Formservices_product_search.text_product_search)
+        await state.set_state(ProductSearchForm.product_search_text)
     else:
         await message.reply("У вас нет прав на выполнение этой команды.")
 
 
 # Обработчик текстовых сообщений (для админа, чтобы обновить информацию)
-@router.message(Formservices_product_search.text_product_search)
-async def update_info(message: Message, state: FSMContext):
+@router.message(ProductSearchForm.product_search_text)
+async def handle_update_product_search_info(message: Message, state: FSMContext):
     text = message.html_text
     bot_info = text
     save_bot_info(bot_info, file_path="messages/selection_goods_analyst_sale_marketplaces_messages.json")  # Сохраняем информацию в JSON
@@ -56,7 +56,8 @@ async def update_info(message: Message, state: FSMContext):
     await state.clear()
 
 
-def selection_goods_analyst_sale_marketplaces_register_message_handler():
+def register_product_search_handlers():
     """Регистрируем handlers для бота"""
-    dp.message.register(selection_goods_analyst_sale_marketplaces_handlers)
-    dp.message.register(edit_product_search)
+    dp.message.register(handle_product_search)
+    dp.message.register(handle_edit_product_search_command)
+    dp.message.register(handle_update_product_search_info)

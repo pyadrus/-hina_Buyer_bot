@@ -12,7 +12,7 @@ from handlers.services_and_prices_handlers.payments_await_handlers import paymen
 from handlers.services_and_prices_handlers.product_search_service_handlers import product_search_service_handlers_register_message_handler
 from handlers.reviews_handlers.reviews_handlers import reviews_handlers_register_message_handler
 from handlers.services_and_prices_handlers.selection_goods_analyst_sale_marketplaces_handlers import \
-    selection_goods_analyst_sale_marketplaces_register_message_handler
+    register_product_search_handlers
 from handlers.self_redemption_handlers import self_redemption_handlers_register_message_handler
 from handlers.services_and_prices_handlers import services_and_prices_register_message_handler
 from handlers.types_packaging_handlers.bag_tape_handlers import bag_tape_handlers_register_message_handler
@@ -32,7 +32,7 @@ async def main() -> None:
     await dp.start_polling(bot)
     services_and_prices_register_message_handler()
     main_menu_register_message_handler()
-    selection_goods_analyst_sale_marketplaces_register_message_handler()
+    register_product_search_handlers()
     register_delivery_goods_from_china_handlers()
     goods_redemption_service_handlers_register_message_handler()
     product_search_service_handlers_register_message_handler()
