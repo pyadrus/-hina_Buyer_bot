@@ -1,5 +1,3 @@
-import json
-
 from aiogram import types, F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
