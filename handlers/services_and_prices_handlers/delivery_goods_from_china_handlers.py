@@ -17,8 +17,8 @@ from system.dispatcher import router
 
 
 @router.callback_query(F.data == "delivery_in_china")
-async def delivery_goods_from_china_handlers(callback_query: types.CallbackQuery):
-    """Доставка товаров из Китая"""
+async def handle_delivery_goods_from_china(callback_query: types.CallbackQuery):
+    """Обработчик для доставки товаров из Китая"""
     logger.debug(callback_query)
     logger.debug(callback_query.message.message_id)
     main_menu_key = selection_goods_keyboard()
@@ -33,24 +33,25 @@ async def delivery_goods_from_china_handlers(callback_query: types.CallbackQuery
                                  reply_markup=main_menu_key
                                  )
 
-class FormDeliveryInChina(StatesGroup):
-    text_delivery_in_china = State()
+
+class DeliveryInChinaForm(StatesGroup):
+    delivery_info_text = State()
 
 
 # Обработчик команды /edit_delivery_in_china (только для админа)
 @router.message(Command("edit_delivery_in_china"))
-async def edit_delivery_in_china(message: Message, state: FSMContext):
+async def handle_edit_delivery_in_china_command(message: Message, state: FSMContext):
     """Редактирование информации: Доставка товаров из Китая"""
     if message.from_user.id == ADMIN_USER_ID:
         await message.answer("Введите новый текст, используя разметку HTML.")
-        await state.set_state(FormDeliveryInChina.text_delivery_in_china)
+        await state.set_state(DeliveryInChinaForm.delivery_info_text)
     else:
         await message.reply("У вас нет прав на выполнение этой команды.")
 
 
 # Обработчик текстовых сообщений (для админа, чтобы обновить информацию)
-@router.message(FormDeliveryInChina.text_delivery_in_china)
-async def update_info(message: Message, state: FSMContext):
+@router.message(DeliveryInChinaForm.delivery_info_text)
+async def handle_update_delivery_info(message: Message, state: FSMContext):
     text = message.html_text
     bot_info = text
     save_bot_info(bot_info, file_path="messages/delivery_goods_from_china_messages.json")  # Сохраняем информацию в JSON
@@ -58,7 +59,8 @@ async def update_info(message: Message, state: FSMContext):
     await state.clear()
 
 
-def delivery_goods_from_china_handlers_register_message_handler():
+def register_delivery_goods_from_china_handlers():
     """Регистрируем handlers для бота"""
-    dp.message.register(delivery_goods_from_china_handlers)  # Доставка товаров из Китая
-    dp.message.register(edit_delivery_in_china)  # Редактирование информации: Доставка товаров из Китая
+    dp.message.register(handle_delivery_goods_from_china)  # Доставка товаров из Китая
+    dp.message.register(handle_edit_delivery_in_china_command)  # Редактирование информации: Доставка товаров из Китая
+    dp.message.register(handle_update_delivery_info)  # Обновление информации: Доставка товаров из Китая
