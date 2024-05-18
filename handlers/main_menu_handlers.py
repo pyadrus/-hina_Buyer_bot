@@ -10,6 +10,7 @@ from aiogram.types import Message
 from loguru import logger
 
 from keyboards.user_keyboards import main_menu_keyboard
+from services.services import save_bot_info
 from system.dispatcher import ADMIN_USER_ID, dp
 from system.dispatcher import bot
 from system.dispatcher import router
@@ -24,12 +25,6 @@ def load_bot_info():
     with open("messages/main_menu_messages.json", 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
     return data
-
-
-# Сохранение информации в JSON-файл
-def save_bot_info(data):
-    with open("messages/main_menu_messages.json", 'w', encoding='utf-8') as json_file:
-        json.dump(data, json_file, ensure_ascii=False, indent=4)
 
 
 # Обработчик команды /edit (только для админа)
@@ -47,7 +42,7 @@ async def edit_info(message: Message, state: FSMContext):
 async def update_info(message: Message, state: FSMContext):
     text = message.html_text
     bot_info = text
-    save_bot_info(bot_info)  # Сохраняем информацию в JSON
+    save_bot_info(bot_info, file_path="messages/main_menu_messages.json")  # Сохраняем информацию в JSON
     await message.reply("Информация обновлена.")
     await state.clear()
 

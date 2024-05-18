@@ -9,16 +9,11 @@ from aiogram.types import Message
 from loguru import logger
 
 from keyboards.user_keyboards import main_menu_selection_keyboard
+from services.services import load_bot_info_services_and_prices, save_bot_info
 from system.dispatcher import ADMIN_USER_ID
 from system.dispatcher import bot
 from system.dispatcher import dp
 from system.dispatcher import router
-
-
-def load_bot_info_services_and_prices():
-    with open("messages/order_form_handlers_messages.json", 'r', encoding='utf-8') as json_file:
-        data = json.load(json_file)
-    return data
 
 
 @router.callback_query(F.data == "order_form")
@@ -28,7 +23,7 @@ async def order_form_handlers_handlers(callback_query: types.CallbackQuery):
     logger.debug(callback_query.message.message_id)
     main_menu_key = main_menu_selection_keyboard()
 
-    data = load_bot_info_services_and_prices()
+    data = load_bot_info_services_and_prices(file_path="messages/order_form_handlers_messages.json")
 
     document = FSInputFile('messages/Бланк_заказа_ChinaBuyer.xlsx')
     await bot.send_document(chat_id=callback_query.message.chat.id, document=document, reply_markup=main_menu_key,
@@ -37,12 +32,6 @@ async def order_form_handlers_handlers(callback_query: types.CallbackQuery):
 
 class Formedit_order_form(StatesGroup):
     text_edit_order_form = State()
-
-
-# Сохранение информации в JSON-файл
-def save_bot_info(data):
-    with open("messages/order_form_handlers_messages.json", 'w', encoding='utf-8') as json_file:
-        json.dump(data, json_file, ensure_ascii=False, indent=4)
 
 
 # Обработчик команды /edit_order_form (только для админа)
@@ -61,7 +50,7 @@ async def edit_order_form(message: Message, state: FSMContext):
 async def update_info(message: Message, state: FSMContext):
     text = message.html_text
     bot_info = text
-    save_bot_info(bot_info)  # Сохраняем информацию в JSON
+    save_bot_info(bot_info, file_path="messages/order_form_handlers_messages.json")  # Сохраняем информацию в JSON
     await message.reply("Информация обновлена.")
     await state.clear()
 

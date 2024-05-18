@@ -1,5 +1,3 @@
-import json
-
 from aiogram import types, F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
@@ -9,16 +7,11 @@ from aiogram.types import Message
 from loguru import logger
 
 from keyboards.user_keyboards import services_and_prices_keyboard
+from services.services import load_bot_info_services_and_prices, save_bot_info
 from system.dispatcher import ADMIN_USER_ID
 from system.dispatcher import bot
 from system.dispatcher import dp
 from system.dispatcher import router
-
-
-def load_bot_info_services_and_prices():
-    with open("messages/services_and_prices_messages.json", 'r', encoding='utf-8') as json_file:
-        data = json.load(json_file)
-    return data
 
 
 @router.callback_query(F.data == "services_and_prices")
@@ -28,7 +21,7 @@ async def services_and_prices_handler(callback_query: types.CallbackQuery):
     logger.debug(callback_query.message.message_id)
     main_menu_key = services_and_prices_keyboard()
 
-    data = load_bot_info_services_and_prices()
+    data = load_bot_info_services_and_prices(file_path="messages/services_and_prices_messages.json")
     document = FSInputFile('messages/image/1.png')
     media = InputMediaPhoto(media=document, caption=data)
 
@@ -41,12 +34,6 @@ async def services_and_prices_handler(callback_query: types.CallbackQuery):
 
 class Formservices_and_prices(StatesGroup):
     textservices_and_prices = State()
-
-
-# Сохранение информации в JSON-файл
-def save_bot_info(data):
-    with open("messages/services_and_prices_messages.json", 'w', encoding='utf-8') as json_file:
-        json.dump(data, json_file, ensure_ascii=False, indent=4)
 
 
 # Обработчик команды /edit_services_and_prices (только для админа)
@@ -65,7 +52,7 @@ async def edit_services_and_prices(message: Message, state: FSMContext):
 async def update_info(message: Message, state: FSMContext):
     text = message.html_text
     bot_info = text
-    save_bot_info(bot_info)  # Сохраняем информацию в JSON
+    save_bot_info(bot_info, file_path="messages/services_and_prices_messages.json")  # Сохраняем информацию в JSON
     await message.reply("Информация обновлена.")
     await state.clear()
 

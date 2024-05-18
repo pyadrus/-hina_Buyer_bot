@@ -9,16 +9,11 @@ from aiogram.types import Message
 from loguru import logger
 
 from keyboards.user_keyboards import selection_goods_keyboard
+from services.services import load_bot_info_services_and_prices, save_bot_info
 from system.dispatcher import ADMIN_USER_ID
 from system.dispatcher import bot
 from system.dispatcher import dp
 from system.dispatcher import router
-
-
-def load_bot_info_services_and_prices():
-    with open("messages/delivery_goods_from_china_messages.json", 'r', encoding='utf-8') as json_file:
-        data = json.load(json_file)
-    return data
 
 
 @router.callback_query(F.data == "delivery_in_china")
@@ -28,7 +23,7 @@ async def delivery_goods_from_china_handlers(callback_query: types.CallbackQuery
     logger.debug(callback_query.message.message_id)
     main_menu_key = selection_goods_keyboard()
 
-    data = load_bot_info_services_and_prices()
+    data = load_bot_info_services_and_prices(file_path="messages/delivery_goods_from_china_messages.json")
     document = FSInputFile('messages/image/3.png')
     media = InputMediaPhoto(media=document, caption=data)
 
@@ -40,12 +35,6 @@ async def delivery_goods_from_china_handlers(callback_query: types.CallbackQuery
 
 class FormDeliveryInChina(StatesGroup):
     text_delivery_in_china = State()
-
-
-# Сохранение информации в JSON-файл
-def save_bot_info(data):
-    with open("messages/delivery_goods_from_china_messages.json", 'w', encoding='utf-8') as json_file:
-        json.dump(data, json_file, ensure_ascii=False, indent=4)
 
 
 # Обработчик команды /edit_delivery_in_china (только для админа)
@@ -64,7 +53,7 @@ async def edit_delivery_in_china(message: Message, state: FSMContext):
 async def update_info(message: Message, state: FSMContext):
     text = message.html_text
     bot_info = text
-    save_bot_info(bot_info)  # Сохраняем информацию в JSON
+    save_bot_info(bot_info, file_path="messages/delivery_goods_from_china_messages.json")  # Сохраняем информацию в JSON
     await message.reply("Информация обновлена.")
     await state.clear()
 

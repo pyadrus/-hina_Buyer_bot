@@ -1,5 +1,3 @@
-import json
-
 from aiogram import types, F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
@@ -8,16 +6,11 @@ from aiogram.types import Message
 from loguru import logger
 
 from keyboards.user_keyboards import selection_goods_keyboard
+from services.services import load_bot_info_services_and_prices, save_bot_info
 from system.dispatcher import ADMIN_USER_ID
 from system.dispatcher import bot
 from system.dispatcher import dp
 from system.dispatcher import router
-
-
-def load_bot_info_services_and_prices():
-    with open("messages/product_search_service_messages.json", 'r', encoding='utf-8') as json_file:
-        data = json.load(json_file)
-    return data
 
 
 @router.callback_query(F.data == "search_in_china")
@@ -26,9 +19,7 @@ async def product_search_service_handlers(callback_query: types.CallbackQuery):
     logger.debug(callback_query.message.message_id)
     main_menu_key = selection_goods_keyboard()
 
-    data = load_bot_info_services_and_prices()
-    # document = FSInputFile('messages/image/4.png')
-    # media = InputMediaPhoto(caption=data)
+    data = load_bot_info_services_and_prices(file_path="messages/product_search_service_messages.json")
 
     await bot.edit_message_caption(
         chat_id=callback_query.message.chat.id,
@@ -40,12 +31,6 @@ async def product_search_service_handlers(callback_query: types.CallbackQuery):
 
 class Formservices_search_in_china(StatesGroup):
     text_search_in_china = State()
-
-
-# Сохранение информации в JSON-файл
-def save_bot_info(data):
-    with open("messages/product_search_service_messages.json", 'w', encoding='utf-8') as json_file:
-        json.dump(data, json_file, ensure_ascii=False, indent=4)
 
 
 # Обработчик команды /edit_product_search_service (только для админа)
@@ -64,7 +49,7 @@ async def edit_search_in_china(message: Message, state: FSMContext):
 async def update_info(message: Message, state: FSMContext):
     text = message.html_text
     bot_info = text
-    save_bot_info(bot_info)  # Сохраняем информацию в JSON
+    save_bot_info(bot_info, file_path="messages/product_search_service_messages.json")  # Сохраняем информацию в JSON
     await message.reply("Информация обновлена.")
     await state.clear()
 
