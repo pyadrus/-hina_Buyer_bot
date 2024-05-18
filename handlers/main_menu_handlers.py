@@ -9,6 +9,7 @@ from aiogram.types import FSInputFile, InputMediaPhoto
 from aiogram.types import Message
 from loguru import logger
 
+from handlers.database.database import recording_data_of_users_who_launched_the_bot
 from keyboards.user_keyboards import main_menu_keyboard
 from services.services import save_bot_info
 from system.dispatcher import ADMIN_USER_ID, dp
@@ -49,6 +50,15 @@ async def update_info(message: Message, state: FSMContext):
 
 @dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
+
+    user_id = message.from_user.id
+    user_name = message.from_user.username
+    user_first_name = message.from_user.first_name
+    user_last_name = message.from_user.last_name
+    user_date = message.date.strftime("%Y-%m-%d %H:%M:%S")
+    logger.info(f"{user_id} {user_name} {user_first_name} {user_last_name} {user_date}")
+    recording_data_of_users_who_launched_the_bot(user_id, user_name, user_first_name, user_last_name, user_date)
+
     main_menu_key = main_menu_keyboard()
 
     document = FSInputFile('messages/image/1.png')
@@ -62,6 +72,14 @@ async def command_start_handler(message: Message) -> None:
 async def main_menu_handlers(callback_query: types.CallbackQuery):
     logger.debug(callback_query)
     logger.debug(callback_query.message.message_id)
+    user_id = callback_query.from_user.id
+    user_name = callback_query.from_user.username
+    user_first_name = callback_query.from_user.first_name
+    user_last_name = callback_query.from_user.last_name
+    user_date = callback_query.message.date.strftime("%Y-%m-%d %H:%M:%S")
+    logger.info(f"{user_id} {user_name} {user_first_name} {user_last_name} {user_date}")
+    recording_data_of_users_who_launched_the_bot(user_id, user_name, user_first_name, user_last_name, user_date)
+
     main_menu_key = main_menu_keyboard()
 
     data = load_bot_info()

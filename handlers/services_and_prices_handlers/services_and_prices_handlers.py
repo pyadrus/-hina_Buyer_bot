@@ -61,3 +61,7 @@ def services_and_prices_register_message_handler():
     """Регистрируем handlers для бота"""
     dp.message.register(services_and_prices_handler)
     dp.message.register(edit_services_and_prices)
+
+
+if __name__ == "__main__":
+    services_and_prices_register_message_handler()
