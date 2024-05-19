@@ -19,15 +19,17 @@ async def wooden_sheathing_bag_tape_handlers(callback_query: types.CallbackQuery
     """Деревянная обрешетка + мешок + скотч"""
     logger.debug(callback_query)
     logger.debug(callback_query.message.message_id)
-    data = load_bot_info_services_and_prices(file_path="messages/types_packaging_messages/wooden_sheathing_bag_tape_messages.json")
+    data = load_bot_info_services_and_prices(
+        file_path="messages/types_packaging_messages/wooden_sheathing_bag_tape_messages.json")
     main_menu_key = tapes_packing_keyboard_back()
 
     await bot.edit_message_caption(
-                                   chat_id=callback_query.message.chat.id,
-                                   message_id=callback_query.message.message_id,
-                                   caption=data,
-                                   reply_markup=main_menu_key
-                                   )
+        chat_id=callback_query.message.chat.id,
+        message_id=callback_query.message.message_id,
+        caption=data,
+        reply_markup=main_menu_key
+    )
+
 
 class Formwooden_sheathing_bag_tape(StatesGroup):
     text_wooden_sheathing_bag_tape = State()
@@ -54,8 +56,9 @@ async def update_info(message: Message, state: FSMContext):
     await message.reply("Информация обновлена.")
     await state.clear()
 
+
 def wooden_sheathing_bag_tape_handlers_register_message_handler():
     """Регистрируем handlers для бота"""
-    dp.message.register(wooden_sheathing_bag_tape_handlers) # Добавляем обработчик Деревянная обрешетка + мешок + скотч
+    dp.message.register(wooden_sheathing_bag_tape_handlers)  # Добавляем обработчик Деревянная обрешетка + мешок + скотч
     dp.message.register(edit_wooden_sheathing_bag_tape)  # Редактирование информации: Деревянная обрешетка + мешок +
     # скотч

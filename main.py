@@ -2,12 +2,10 @@ import asyncio
 import logging
 import sys
 
-# from handlers.admin_handlers import register_handlers_admin
 from handlers.main_menu_handlers import main_menu_register_message_handler
 from handlers.order_form_handlers import order_form_handlers_handlers_register_message_handler
 from handlers.reviews_handlers.reviews_handlers import reviews_handlers_register_message_handler
 from handlers.self_redemption_handlers import self_redemption_handlers_register_message_handler
-# from handlers.services_and_prices_handlers import services_and_prices_register_message_handler
 from handlers.services_and_prices_handlers.delivery_goods_from_china_handlers import \
     register_delivery_goods_from_china_handlers
 from handlers.services_and_prices_handlers.goods_redemption_service_handlers import \
@@ -55,8 +53,6 @@ async def main() -> None:
     pallet_crate_handlers_register_message_handler()
     pallet_with_solid_wooden_box_handlers_register_message_handler()
     reviews_handlers_register_message_handler()
-    # register_handlers_admin()
-    # services_and_prices_register_message_handler()
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)

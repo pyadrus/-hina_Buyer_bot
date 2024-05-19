@@ -122,3 +122,52 @@ def update_name_in_db(user_id, new_name):
     except Exception as e:
         print("Ошибка при обновлении имени:", str(e))
         return False  # Возвращаем False в случае ошибки
+
+
+def check_user_exists_in_db(user_id):
+    # Подключитесь к вашей базе данных
+    conn = sqlite3.connect("your_database.db")  # Замените "your_database.db" на имя вашей базы данных
+    cursor = conn.cursor()
+    cursor.execute(
+        '''CREATE TABLE IF NOT EXISTS users (user_id INTEGER, name TEXT, surname TEXT, city TEXT, phone_number TEXT, registration_date TEXT)''')
+    # Выполните SQL-запрос для проверки наличия пользователя в базе данных по его user_id
+    cursor.execute("SELECT COUNT(*) FROM users WHERE user_id = ?", (user_id,))
+    # Извлеките результат запроса
+    user_count = cursor.fetchone()[0]
+    conn.close()
+    # Если пользователь с указанным user_id найден (user_count больше 0), верните True, иначе верните False
+    return user_count > 0
+
+
+def update_city_in_db(user_id, new_city):
+    try:
+        # Подключаемся к базе данных (предполагается, что она уже существует)
+        conn = sqlite3.connect('your_database.db')
+        cursor = conn.cursor()
+        # SQL-запрос для обновления имени
+        update_query = "UPDATE users SET city = ? WHERE user_id = ?"
+        cursor.execute(update_query, (new_city, user_id))
+        conn.commit()  # Применяем изменения к базе данных
+        conn.close()  # Закрываем соединение с базой данных
+        return True  # Возвращаем True в случае успешного обновления
+    except Exception as e:
+        print("Ошибка при обновлении фамилии:", str(e))
+        return False  # Возвращаем False в случае ошибки
+
+
+def update_surname_in_db(user_id, new_surname):
+    try:
+        # Подключаемся к базе данных (предполагается, что она уже существует)
+        conn = sqlite3.connect('your_database.db')
+        cursor = conn.cursor()
+        # SQL-запрос для обновления имени
+        update_query = "UPDATE users SET surname = ? WHERE user_id = ?"
+        cursor.execute(update_query, (new_surname, user_id))
+        conn.commit()  # Применяем изменения к базе данных
+        conn.close()  # Закрываем соединение с базой данных
+        return True  # Возвращаем True в случае успешного обновления
+    except Exception as e:
+        print("Ошибка при обновлении фамилии:", str(e))
+        return False  # Возвращаем False в случае ошибки
+
+# Функция для изменения имени в базе данных по ID

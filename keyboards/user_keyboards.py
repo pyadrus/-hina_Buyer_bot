@@ -1,4 +1,4 @@
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton
 
 
 def main_menu_keyboard() -> InlineKeyboardMarkup:
@@ -74,6 +74,51 @@ def tapes_packing_keyboard_back() -> InlineKeyboardMarkup:
     ]
     main_menu_key = InlineKeyboardMarkup(inline_keyboard=rows)
     return main_menu_key
+
+
+def create_my_details_keyboard():
+    """Создает клавиатуру для кнопки 'Мои данные'"""
+    my_details_keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Регистрация', callback_data='my_details')]
+    ])
+
+    return my_details_keyboard
+
+
+def create_data_modification_keyboard() -> InlineKeyboardMarkup:
+    """Создает клавиатуру для изменения данных"""
+    # data_modification_keyboard = InlineKeyboardMarkup()
+    rows = [
+        [InlineKeyboardButton(text="✏️Изменить Имя", callback_data="edit_name"),
+         InlineKeyboardButton(text="✏️Изменить Фамилию", callback_data="edit_surname")],
+
+        [InlineKeyboardButton(text="✏️Изменить Город", callback_data="edit_city"),
+         InlineKeyboardButton(text="✏️Изменить Номер 📱 ", callback_data="edit_phone")],
+        [InlineKeyboardButton(text="↩️ Вернуться в начальное меню", callback_data="disagree")]]
+
+    data_modification_keyboard = InlineKeyboardMarkup(inline_keyboard=rows)
+    return data_modification_keyboard
+
+
+def create_sign_up_keyboard() -> InlineKeyboardMarkup:
+    """Создает клавиатуру для кнопок 'Согласен' и 'Не согласен'"""
+    # sign_up_keyboard = InlineKeyboardMarkup()
+    rows = [
+        [InlineKeyboardButton(text='👍 Согласен', callback_data='agree'),
+         InlineKeyboardButton(text='👎 Не согласен', callback_data='disagree')]]
+
+    sign_up_keyboard = InlineKeyboardMarkup(inline_keyboard=rows)
+    return sign_up_keyboard
+
+
+def create_contact_keyboard():
+    """Создает клавиатуру для отправки контакта"""
+    rows = [
+        [KeyboardButton(text="📱 Отправить", request_contact=True)]
+    ]
+
+    contact_keyboard = ReplyKeyboardMarkup(keyboard=rows, resize_keyboard=True, one_time_keyboard=True)
+    return contact_keyboard
 
 
 if __name__ == '__main__':
