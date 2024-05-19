@@ -2,6 +2,7 @@ import asyncio
 import logging
 import sys
 
+from handlers.admin_handlers.admin_handlers import register_handlers_admin
 from handlers.main_menu_handlers import main_menu_register_message_handler
 from handlers.order_form_handlers import order_form_handlers_handlers_register_message_handler
 from handlers.reviews_handlers.reviews_handlers import reviews_handlers_register_message_handler
@@ -53,6 +54,7 @@ async def main() -> None:
     pallet_crate_handlers_register_message_handler()
     pallet_with_solid_wooden_box_handlers_register_message_handler()
     reviews_handlers_register_message_handler()
+    register_handlers_admin()
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)

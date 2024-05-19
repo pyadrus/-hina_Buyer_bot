@@ -36,18 +36,20 @@ def get_user_data_from_db_email(user_id):
         return None
 
 
-def insert_user_data_to_database(user_id, name, phone_number, registration_date):
+def insert_user_data_to_database(user_id, name, surname, city, phone_number, registration_date):
     """Записывает данные пользователя в базу данных"""
     try:
         conn = sqlite3.connect("your_database.db")  # Замените "your_database.db" на имя вашей базы данных
         cursor = conn.cursor()
         cursor.execute('''CREATE TABLE IF NOT EXISTS users (user_id INTEGER,
                                                             name TEXT,
+                                                            surname TEXT,
+                                                            city TEXT,
                                                             phone_number TEXT,
                                                             registration_date TEXT)''')
-        cursor.execute("INSERT INTO users (user_id, name, phone_number, registration_date) "
-                       "VALUES (?, ?, ?, ?)",
-                       (user_id, name, phone_number, registration_date))
+        cursor.execute("INSERT INTO users (user_id, name,surname, city, phone_number, registration_date) "
+                       "VALUES (?, ?, ?, ?, ?, ?)",
+                       (user_id, name, surname, city, phone_number, registration_date))
         conn.commit()
     except sqlite3.Error as e:
         print(f"Ошибка при записи данных в базу данных: {e}")
