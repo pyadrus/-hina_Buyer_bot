@@ -1,3 +1,5 @@
+import os
+
 from aiogram import types, F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
@@ -12,6 +14,22 @@ from system.dispatcher import ADMIN_USER_ID
 from system.dispatcher import bot
 from system.dispatcher import dp
 from system.dispatcher import router
+
+
+@router.message(Command("delivery_in_china_photo"))
+async def delivery_in_china_photo(message: Message, state: FSMContext):
+    await message.answer("Пожалуйста, отправьте новое фото для замены в формате png")
+
+
+@router.message(F.photo)
+async def replace_photo(message: types.Message):
+    # Получаем файл фотографии
+    photo = message.photo[-1]
+    file_info = await message.bot.get_file(photo.file_id)
+    new_photo_path = os.path.join("messages/image/", '3.png')
+    # Загружаем файл на диск
+    await message.bot.download_file(file_info.file_path, new_photo_path)
+    await message.answer("Фото успешно заменено!")
 
 
 @router.callback_query(F.data == "delivery_in_china")
@@ -61,4 +79,5 @@ def register_delivery_goods_from_china_handlers():
     """Регистрируем handlers для бота"""
     dp.message.register(handle_delivery_goods_from_china)  # Доставка товаров из Китая
     dp.message.register(handle_edit_delivery_in_china_command)  # Редактирование информации: Доставка товаров из Китая
+    dp.message.register(handle_update_delivery_info)  # Обновление информации: Доставка товаров из Китая
     dp.message.register(handle_update_delivery_info)  # Обновление информации: Доставка товаров из Китая

@@ -9,7 +9,7 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import FSInputFile, InputMediaPhoto
 from aiogram.types import Message
 from loguru import logger
-
+import os
 from handlers.database.database import recording_data_of_users_who_launched_the_bot, check_user_exists_in_db, \
     get_user_data_from_db, update_name_in_db, update_surname_in_db, update_city_in_db, update_phone_in_db, \
     insert_user_data_to_database
@@ -30,6 +30,22 @@ def load_bot_info():
     with open("messages/main_menu_messages.json", 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
     return data
+
+
+@router.message(Command("edit_photo"))
+async def edit_photo(message: Message, state: FSMContext):
+    await message.answer("Пожалуйста, отправьте новое фото для замены в формате png")
+
+
+@router.message(F.photo)
+async def replace_photo(message: types.Message):
+    # Получаем файл фотографии
+    photo = message.photo[-1]
+    file_info = await message.bot.get_file(photo.file_id)
+    new_photo_path = os.path.join("messages/image/", '1.png')
+    # Загружаем файл на диск
+    await message.bot.download_file(file_info.file_path, new_photo_path)
+    await message.answer("Фото успешно заменено!")
 
 
 # Обработчик команды /edit (только для админа)
@@ -346,3 +362,4 @@ def main_menu_register_message_handler():
     dp.message.register(update_info)
     dp.message.register(edit_info)
     dp.message.register(main_menu_handlers)
+    dp.message.register(edit_photo)

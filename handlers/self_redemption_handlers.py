@@ -1,3 +1,5 @@
+import os
+
 from aiogram import types, F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
@@ -12,6 +14,20 @@ from system.dispatcher import ADMIN_USER_ID
 from system.dispatcher import bot
 from system.dispatcher import dp
 from system.dispatcher import router
+
+
+@router.message(Command("self_purchase_photo"))
+async def self_purchase_photo(message: Message, state: FSMContext):
+    await message.answer("Пожалуйста, отправьте новое фото для замены в формате png")
+
+
+@router.message(F.photo)
+async def replace_photo(message: types.Message):
+    photo = message.photo[-1]  # Получаем файл фотографии
+    file_info = await message.bot.get_file(photo.file_id)
+    new_photo_path = os.path.join("messages/image/", '5.png')
+    await message.bot.download_file(file_info.file_path, new_photo_path)  # Загружаем файл на диск
+    await message.answer("Фото успешно заменено!")
 
 
 @router.callback_query(F.data == "self_purchase")
@@ -61,3 +77,4 @@ def self_redemption_handlers_register_message_handler():
     """Регистрируем handlers для бота"""
     dp.message.register(self_redemption_handlers)
     dp.message.register(edit_self_purchase)
+    dp.message.register(self_purchase_photo)
