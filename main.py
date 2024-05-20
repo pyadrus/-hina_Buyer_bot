@@ -31,6 +31,7 @@ from handlers.types_packaging_handlers.pallet_with_solid_wooden_box_handlers imp
 from handlers.types_packaging_handlers.types_packaging_handlers import types_packaging_handlers_register_message_handler
 from handlers.types_packaging_handlers.wooden_sheathing_bag_tape_handlers import \
     wooden_sheathing_bag_tape_handlers_register_message_handler
+from handlers.useful_information_handlers import useful_information_register_message_handler
 from system.dispatcher import dp, bot
 
 
@@ -55,6 +56,7 @@ async def main() -> None:
     pallet_with_solid_wooden_box_handlers_register_message_handler()
     reviews_handlers_register_message_handler()
     register_handlers_admin()
+    useful_information_register_message_handler()
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)

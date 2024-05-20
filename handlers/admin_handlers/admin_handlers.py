@@ -2,7 +2,7 @@ import os
 import sqlite3
 
 import openpyxl
-from aiogram import types, F
+from aiogram import types
 from aiogram.filters import Command
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
@@ -22,6 +22,8 @@ async def help_handler(message: Message, state: FSMContext):
     """Админ панель"""
     if message.from_user.id == ADMIN_USER_ID:
         await message.answer("Команды админа:\n\n"
+
+                             "<b>Редактирование текста:</b>\n"
                              "/edit_services_and_prices - редактирование: ⭐️ Услуги и цены\n"
                              "/edit - редактирование: пост приветствиt\n"
                              "/edit_self_purchase - редактирование: 🛍 Самовыкуп\n"
@@ -39,7 +41,16 @@ async def help_handler(message: Message, state: FSMContext):
                              "/edit_pallet_crate - редактирование: Паллет в обрешетке\n"
                              "edit_pallet_with_solid_wooden_box - редактирование: Паллет с глухим деревянным коробом\n"
                              "/edit_types_packaging_handlers - редактирование: Назад к видам упаковки\n"
-                             "/edit_wooden_sheathing_bag_tape - редактирование: Деревянная обрешетка + мешок + скотч\n\n"
+                             "/edit_wooden_sheathing_bag_tape - редактирование: Деревянная обрешетка + мешок + скотч\n"
+                             "/edit_useful_information - редактирование: 📚 Полезная информация\n\n"
+
+                             "<b>Получение данных:</b>\n"
+                             "/get_a_list_of_users_registered_in_the_bot - Получение списка зарегистрированных пользователей\n"
+                             "/get_users_who_launched_the_bot - Получение данных пользователей, запускающих бота\n\n"
+
+                             "<b>Отправка сообщений:</b>\n"
+                             "/send_an_image_to_bot_users - Отправка изображения через бота + текст\n"
+                             "/send_a_message_to_bot_users - Отправка текста через бота\n\n"
                              "/start - начальное меню\n")
     else:
         await message.reply("У вас нет прав на выполнение этой команды.")
@@ -123,17 +134,13 @@ async def get_users_who_launched_the_bot(message: types.Message, state: FSMConte
         if message.from_user.id not in [535185511, 301634256]:
             await message.reply('У вас нет доступа к этой команде.')
             return
-        # Подключение к базе данных SQLite
-        conn = sqlite3.connect('your_database.db')
+        conn = sqlite3.connect('your_database.db')  # Подключение к базе данных SQLite
         cursor = conn.cursor()
-        # Получение данных из базы данных
-        cursor.execute("SELECT * FROM users_start")
+        cursor.execute("SELECT * FROM users_start")  # Получение данных из базы данных
         orders = cursor.fetchall()
-        # Создание файла Excel
-        workbook = create_excel_file_start(orders)
+        workbook = create_excel_file_start(orders)  # Создание файла Excel
         filename = 'Данные пользователей запустивших бота.xlsx'
         workbook.save(filename)  # Сохранение файла
-        # file = InputFile(filename)
         file = FSInputFile(filename)
         text = ("Данные пользователей зарегистрированных в боте\n\n"
                 "Для возврата в начальное меню нажми на /start или /help")
@@ -179,22 +186,15 @@ async def process_send_image_with_caption(message: types.Message, state: FSMCont
     """
     Этот хендлер будет ждать введенной подписи и выполнять рассылку
     """
-    state_data = await state.get_data()  # Retrieve state data
-    # async with state.proxy() as data:
-    #     data['caption'] = message.text
-    # Store the caption in state data
-    state_data['caption'] = message.text
-    # Get the photo and caption from state data
-    photo = state_data.get('photo')
+    state_data = await state.get_data()  # Получить данные о состоянии
+    state_data['caption'] = message.text  # Сохраните заголовок в данных состояния
+    photo = state_data.get('photo')  # Получите фотографию и подпись из государственных данных.
     caption = state_data.get('caption')
-    # Получаем список уникальных ID пользователей из базы данных
-    user_ids = get_user_ids()
+    user_ids = get_user_ids()  # Получаем список уникальных ID пользователей из базы данных
     if user_ids:
-        # Рассылка изображения с подписью всем пользователям из списка
-        for user_id in user_ids:
+        for user_id in user_ids:  # Рассылка изображения с подписью всем пользователям из списка
             try:
-                # Отправляем изображение с подписью
-                await bot.send_photo(user_id, photo, caption=caption)
+                await bot.send_photo(user_id, photo, caption=caption)  # Отправляем изображение с подписью
             except Exception as e:
                 print(f"Ошибка при отправке изображения с подписью пользователю {user_id}: {str(e)}")
     await message.answer("Изображение успешно разослано всем пользователям.")
@@ -215,21 +215,18 @@ async def send_a_message_to_bot_users(message: types.Message, state: FSMContext)
         logger.error(e)
 
 
-@router.message(StateFilter(MyStates.waiting_for_message), F.TEXT)
-# @dp.message_handler(state=MyStates.waiting_for_message, content_types=types.ContentType.TEXT)
+@router.message(StateFilter(MyStates.waiting_for_message))
 async def process_send_message(message: types.Message, state: FSMContext):
     """
     Этот хендлер будет ждать введенного текста и выполнять рассылку
     """
-    async with state.proxy() as data:
-        data['message_text'] = message.text
     # Получаем список уникальных ID пользователей из базы данных
+    message_text = message.text
     user_ids = get_user_ids()
     if user_ids:
-        # Рассылка сообщения всем пользователям из списка
-        for user_id in user_ids:
+        for user_id in user_ids:  # Рассылка сообщения всем пользователям из списка
             try:
-                await bot.send_message(user_id, data['message_text'], parse_mode=ParseMode.MARKDOWN)
+                await bot.send_message(chat_id=user_id, text=message_text, parse_mode="HTML")
             except Exception as e:
                 print(f"Ошибка при отправке сообщения пользователю {user_id}: {str(e)}")
     await message.answer("Сообщение успешно разослано всем пользователям.")
