@@ -57,7 +57,7 @@ async def help_handler(message: Message, state: FSMContext):
                              "/delivery_in_china_photo - ⭐️ Услуги и цены\n"
                              "/warranty_service_photo - Выкуп товаров\n"
                              "/product_search_photo - Подбор товара\n"
-                             "/self_purchase_photo - 🛍 Самовыкуп\n"
+                             "/self_purchase_photo - 🛍 Самовыкуп\n\n"
                              "/start - начальное меню\n")
     else:
         await message.reply("У вас нет прав на выполнение этой команды.")
