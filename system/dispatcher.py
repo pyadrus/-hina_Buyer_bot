@@ -13,7 +13,7 @@ storage = MemoryStorage()  # Хранилище
 dp = Dispatcher(storage=storage)
 logging.basicConfig(level=logging.INFO)  # Логирования
 
-ADMIN_USER_ID = 535185511
+ADMIN_USER_ID = 535185511, 388207248 # Администраторы
 
 router = Router()
 dp.include_router(router)

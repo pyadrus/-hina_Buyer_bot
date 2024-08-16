@@ -46,7 +46,7 @@ async def goods_redemption_service_handlers(callback_query: types.CallbackQuery)
     await bot.edit_message_media(media=media,
                                  chat_id=callback_query.message.chat.id,
                                  message_id=callback_query.message.message_id,
-                                 reply_markup=main_menu_key, parse_mode="HTML"
+                                 reply_markup=main_menu_key
                                  )
 
 

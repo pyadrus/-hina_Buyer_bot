@@ -29,7 +29,7 @@ async def reviews_handlers(callback_query: types.CallbackQuery):
                                  chat_id=callback_query.message.chat.id,
                                  message_id=callback_query.message.message_id,
                                  reply_markup=main_menu_key
-                                 , parse_mode="HTML")
+                                 )
 
 
 class Formreviews(StatesGroup):

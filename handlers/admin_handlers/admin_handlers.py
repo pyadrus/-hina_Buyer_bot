@@ -91,7 +91,7 @@ async def export_data(message: types.Message, state: FSMContext):
     """Получение списка зарегистрированных пользователей"""
     await state.clear()  # Очищаем состояние
     try:
-        if message.from_user.id not in [535185511, 535773227]:
+        if message.from_user.id not in [535185511, 535773227, 388207248]:
             await message.reply('У вас нет доступа к этой команде.', parse_mode="HTML")
             return
         # Подключение к базе данных SQLite
@@ -138,7 +138,7 @@ async def get_users_who_launched_the_bot(message: types.Message, state: FSMConte
     """Получение данных пользователей, запускающих бота"""
     await state.clear()  # Очищаем состояние
     try:
-        if message.from_user.id not in [535185511, 535773227]:
+        if message.from_user.id not in [535185511, 535773227, 388207248]:
             await message.reply('У вас нет доступа к этой команде.', parse_mode="HTML")
             return
         conn = sqlite3.connect('your_database.db')  # Подключение к базе данных SQLite
@@ -168,7 +168,7 @@ async def send_an_image_to_bot_users(message: types.Message, state: FSMContext):
     """Запрашивает изображение у администратора"""
     await state.clear()  # Очищаем состояние
     try:
-        if message.from_user.id not in [535185511, 535773227]:
+        if message.from_user.id not in [535185511, 535773227, 388207248]:
             await message.reply('У вас нет доступа к этой команде.')
             return
         await bot.send_message(message.from_user.id, text="Загрузите изображение для рассылки:", parse_mode="HTML")
@@ -213,7 +213,7 @@ async def send_a_message_to_bot_users(message: types.Message, state: FSMContext)
     """Запрашивает текст сообщения у администратора"""
     await state.clear()
     try:
-        if message.from_user.id not in [535185511, 535773227]:
+        if message.from_user.id not in [535185511, 535773227, 388207248]:
             await message.reply('У вас нет доступа к этой команде.')
             return
         await bot.send_message(message.from_user.id, text="Введите текст для рассылки:", parse_mode="HTML")
