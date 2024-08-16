@@ -58,9 +58,9 @@ async def help_handler(message: Message, state: FSMContext):
                              "/warranty_service_photo - Выкуп товаров\n"
                              "/product_search_photo - Подбор товара\n"
                              "/self_purchase_photo - 🛍 Самовыкуп\n\n"
-                             "/start - начальное меню\n")
+                             "/start - начальное меню\n", parse_mode="HTML")
     else:
-        await message.reply("У вас нет прав на выполнение этой команды.")
+        await message.reply("У вас нет прав на выполнение этой команды.", parse_mode="HTML")
 
 
 # Функция для создания файла Excel с данными заказов
@@ -91,8 +91,8 @@ async def export_data(message: types.Message, state: FSMContext):
     """Получение списка зарегистрированных пользователей"""
     await state.clear()  # Очищаем состояние
     try:
-        if message.from_user.id not in [535185511, 301634256]:
-            await message.reply('У вас нет доступа к этой команде.')
+        if message.from_user.id not in [535185511, 535773227]:
+            await message.reply('У вас нет доступа к этой команде.', parse_mode="HTML")
             return
         # Подключение к базе данных SQLite
         conn = sqlite3.connect('your_database.db')
@@ -107,7 +107,7 @@ async def export_data(message: types.Message, state: FSMContext):
         text = ("Данные пользователей зарегистрированных в боте\n\n"
                 "Для возврата в начальное меню нажми на /start или /help")
         file = FSInputFile(filename)
-        await bot.send_document(message.from_user.id, document=file, caption=text)  # Отправка файла пользователю
+        await bot.send_document(message.from_user.id, document=file, caption=text, parse_mode="HTML")  # Отправка файла пользователю
         os.remove(filename)  # Удаление файла
     except Exception as e:
         logger.error(e)
@@ -138,8 +138,8 @@ async def get_users_who_launched_the_bot(message: types.Message, state: FSMConte
     """Получение данных пользователей, запускающих бота"""
     await state.clear()  # Очищаем состояние
     try:
-        if message.from_user.id not in [535185511, 301634256]:
-            await message.reply('У вас нет доступа к этой команде.')
+        if message.from_user.id not in [535185511, 535773227]:
+            await message.reply('У вас нет доступа к этой команде.', parse_mode="HTML")
             return
         conn = sqlite3.connect('your_database.db')  # Подключение к базе данных SQLite
         cursor = conn.cursor()
@@ -151,7 +151,7 @@ async def get_users_who_launched_the_bot(message: types.Message, state: FSMConte
         file = FSInputFile(filename)
         text = ("Данные пользователей зарегистрированных в боте\n\n"
                 "Для возврата в начальное меню нажми на /start или /help")
-        await bot.send_document(message.from_user.id, document=file, caption=text)  # Отправка файла пользователю
+        await bot.send_document(message.from_user.id, document=file, caption=text, parse_mode="HTML")  # Отправка файла пользователю
         os.remove(filename)  # Удаление файла
     except Exception as e:
         logger.error(e)
@@ -168,10 +168,10 @@ async def send_an_image_to_bot_users(message: types.Message, state: FSMContext):
     """Запрашивает изображение у администратора"""
     await state.clear()  # Очищаем состояние
     try:
-        if message.from_user.id not in [535185511, 301634256]:
+        if message.from_user.id not in [535185511, 535773227]:
             await message.reply('У вас нет доступа к этой команде.')
             return
-        await bot.send_message(message.from_user.id, text="Загрузите изображение для рассылки:")
+        await bot.send_message(message.from_user.id, text="Загрузите изображение для рассылки:", parse_mode="HTML")
         await state.set_state(MyStates.waiting_for_image)
     except Exception as e:
         logger.error(e)
@@ -184,7 +184,7 @@ async def process_send_image(message: types.Message, state: FSMContext):
     """
 
     await state.update_data(photo=message.photo[-1].file_id)
-    await bot.send_message(message.from_user.id, text="Введите подпись к изображению:")
+    await bot.send_message(message.from_user.id, text="Введите подпись к изображению:", parse_mode="HTML")
     await state.set_state(MyStates.waiting_for_caption)
 
 
@@ -204,7 +204,7 @@ async def process_send_image_with_caption(message: types.Message, state: FSMCont
                 await bot.send_photo(user_id, photo, caption=caption)  # Отправляем изображение с подписью
             except Exception as e:
                 print(f"Ошибка при отправке изображения с подписью пользователю {user_id}: {str(e)}")
-    await message.answer("Изображение успешно разослано всем пользователям.")
+    await message.answer("Изображение успешно разослано всем пользователям.", parse_mode="HTML")
     await state.clear()
 
 
@@ -213,10 +213,10 @@ async def send_a_message_to_bot_users(message: types.Message, state: FSMContext)
     """Запрашивает текст сообщения у администратора"""
     await state.clear()
     try:
-        if message.from_user.id not in [535185511, 301634256]:
+        if message.from_user.id not in [535185511, 535773227]:
             await message.reply('У вас нет доступа к этой команде.')
             return
-        await bot.send_message(message.from_user.id, text="Введите текст для рассылки:")
+        await bot.send_message(message.from_user.id, text="Введите текст для рассылки:", parse_mode="HTML")
         await state.set_state(MyStates.waiting_for_message)
     except Exception as e:
         logger.error(e)
@@ -236,7 +236,7 @@ async def process_send_message(message: types.Message, state: FSMContext):
                 await bot.send_message(chat_id=user_id, text=message_text, parse_mode="HTML")
             except Exception as e:
                 print(f"Ошибка при отправке сообщения пользователю {user_id}: {str(e)}")
-    await message.answer("Сообщение успешно разослано всем пользователям.")
+    await message.answer("Сообщение успешно разослано всем пользователям.", parse_mode="HTML")
     await state.clear()
 
 

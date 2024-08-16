@@ -18,7 +18,7 @@ from system.dispatcher import router
 
 @router.message(Command("delivery_in_china_photo"))
 async def delivery_in_china_photo(message: Message, state: FSMContext):
-    await message.answer("Пожалуйста, отправьте новое фото для замены в формате png")
+    await message.answer("Пожалуйста, отправьте новое фото для замены в формате png", parse_mode="HTML")
 
 
 @router.message(F.photo)
@@ -29,7 +29,7 @@ async def replace_photo(message: types.Message):
     new_photo_path = os.path.join("messages/image/", '3.png')
     # Загружаем файл на диск
     await message.bot.download_file(file_info.file_path, new_photo_path)
-    await message.answer("Фото успешно заменено!")
+    await message.answer("Фото успешно заменено!", parse_mode="HTML")
 
 
 @router.callback_query(F.data == "delivery_in_china")
@@ -46,7 +46,7 @@ async def handle_delivery_goods_from_china(callback_query: types.CallbackQuery):
     await bot.edit_message_media(media=media,
                                  chat_id=callback_query.message.chat.id,
                                  message_id=callback_query.message.message_id,
-                                 reply_markup=main_menu_key
+                                 reply_markup=main_menu_key, parse_mode="HTML"
                                  )
 
 
@@ -59,10 +59,10 @@ class DeliveryInChinaForm(StatesGroup):
 async def handle_edit_delivery_in_china_command(message: Message, state: FSMContext):
     """Редактирование информации: Доставка товаров из Китая"""
     if message.from_user.id == ADMIN_USER_ID:
-        await message.answer("Введите новый текст, используя разметку HTML.")
+        await message.answer("Введите новый текст, используя разметку HTML.", parse_mode="HTML")
         await state.set_state(DeliveryInChinaForm.delivery_info_text)
     else:
-        await message.reply("У вас нет прав на выполнение этой команды.")
+        await message.reply("У вас нет прав на выполнение этой команды.", parse_mode="HTML")
 
 
 # Обработчик текстовых сообщений (для админа, чтобы обновить информацию)
@@ -71,7 +71,7 @@ async def handle_update_delivery_info(message: Message, state: FSMContext):
     text = message.html_text
     bot_info = text
     save_bot_info(bot_info, file_path="messages/delivery_goods_from_china_messages.json")  # Сохраняем информацию в JSON
-    await message.reply("Информация обновлена.")
+    await message.reply("Информация обновлена.", parse_mode="HTML")
     await state.clear()
 
 

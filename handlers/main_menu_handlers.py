@@ -34,7 +34,7 @@ def load_bot_info():
 
 @router.message(Command("edit_photo"))
 async def edit_photo(message: Message, state: FSMContext):
-    await message.answer("Пожалуйста, отправьте новое фото для замены в формате png")
+    await message.answer("Пожалуйста, отправьте новое фото для замены в формате png", parse_mode="HTML")
 
 
 @router.message(F.photo)
@@ -45,17 +45,17 @@ async def replace_photo(message: types.Message):
     new_photo_path = os.path.join("messages/image/", '1.png')
     # Загружаем файл на диск
     await message.bot.download_file(file_info.file_path, new_photo_path)
-    await message.answer("Фото успешно заменено!")
+    await message.answer("Фото успешно заменено!", parse_mode="HTML")
 
 
 # Обработчик команды /edit (только для админа)
 @router.message(Command("edit"))
 async def edit_info(message: Message, state: FSMContext):
     if message.from_user.id == ADMIN_USER_ID:
-        await message.answer("Введите новый текст, используя разметку HTML.")
+        await message.answer("Введите новый текст, используя разметку HTML.", parse_mode="HTML")
         await state.set_state(Form.text)
     else:
-        await message.reply("У вас нет прав на выполнение этой команды.")
+        await message.reply("У вас нет прав на выполнение этой команды.", parse_mode="HTML")
 
 
 # Обработчик текстовых сообщений (для админа, чтобы обновить информацию)
@@ -64,7 +64,7 @@ async def update_info(message: Message, state: FSMContext):
     text = message.html_text
     bot_info = text
     save_bot_info(bot_info, file_path="messages/main_menu_messages.json")  # Сохраняем информацию в JSON
-    await message.reply("Информация обновлена.")
+    await message.reply("Информация обновлена.", parse_mode="HTML")
     await state.clear()
 
 
@@ -98,7 +98,7 @@ async def command_start_handler(message: Message) -> None:
         # Отправляем сообщение с предложением зарегистрироваться и клавиатурой
         await bot.send_message(message.from_user.id, sign_up_text,
                                reply_markup=my_details_key,
-                               disable_web_page_preview=True)
+                               disable_web_page_preview=True, parse_mode="HTML")
 
 
 @router.callback_query(F.data == "my_details")
@@ -123,7 +123,7 @@ async def call_us_handler(callback_query: types.CallbackQuery, state: FSMContext
                     f"✅ <b>Дата регистрации:</b> {registration_date}\n\n")
         edit_data_keyboard = create_data_modification_keyboard()
         await bot.send_message(callback_query.from_user.id, text_mes,
-                               reply_markup=edit_data_keyboard,
+                               reply_markup=edit_data_keyboard, parse_mode="HTML"
                                )
     else:
         # Если данные о пользователе не найдены, предложите пройти регистрацию
@@ -134,7 +134,7 @@ async def call_us_handler(callback_query: types.CallbackQuery, state: FSMContext
                         "Для возврата нажмите /start")
         await bot.send_message(callback_query.from_user.id, sign_up_text,
                                reply_markup=keyboards_sign_up,
-                               disable_web_page_preview=True)
+                               disable_web_page_preview=True, parse_mode="HTML")
 
 
 class MakingAnOrder(StatesGroup):

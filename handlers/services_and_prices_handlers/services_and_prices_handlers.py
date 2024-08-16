@@ -28,7 +28,7 @@ async def services_and_prices_handler(callback_query: types.CallbackQuery):
     await bot.edit_message_media(media=media,
                                  chat_id=callback_query.message.chat.id,
                                  message_id=callback_query.message.message_id,
-                                 reply_markup=main_menu_key
+                                 reply_markup=main_menu_key, parse_mode="HTML"
                                  )
 
 
@@ -41,10 +41,10 @@ class Formservices_and_prices(StatesGroup):
 async def edit_services_and_prices(message: Message, state: FSMContext):
     """Редактирование информации: ⭐️ Услуги и цены"""
     if message.from_user.id == ADMIN_USER_ID:
-        await message.answer("Введите новый текст, используя разметку HTML.")
+        await message.answer("Введите новый текст, используя разметку HTML.", parse_mode="HTML")
         await state.set_state(Formservices_and_prices.textservices_and_prices)
     else:
-        await message.reply("У вас нет прав на выполнение этой команды.")
+        await message.reply("У вас нет прав на выполнение этой команды.", parse_mode="HTML")
 
 
 # Обработчик текстовых сообщений (для админа, чтобы обновить информацию)
@@ -53,7 +53,7 @@ async def update_info(message: Message, state: FSMContext):
     text = message.html_text
     bot_info = text
     save_bot_info(bot_info, file_path="messages/services_and_prices_messages.json")  # Сохраняем информацию в JSON
-    await message.reply("Информация обновлена.")
+    await message.reply("Информация обновлена.", parse_mode="HTML")
     await state.clear()
 
 

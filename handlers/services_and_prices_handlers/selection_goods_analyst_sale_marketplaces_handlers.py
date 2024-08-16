@@ -18,7 +18,7 @@ from system.dispatcher import router
 
 @router.message(Command("product_search_photo"))
 async def product_search_photo(message: Message, state: FSMContext):
-    await message.answer("Пожалуйста, отправьте новое фото для замены в формате png")
+    await message.answer("Пожалуйста, отправьте новое фото для замены в формате png", parse_mode="HTML")
 
 
 @router.message(F.photo)
@@ -27,7 +27,7 @@ async def replace_photo(message: types.Message):
     file_info = await message.bot.get_file(photo.file_id)
     new_photo_path = os.path.join("messages/image/", '2.png')
     await message.bot.download_file(file_info.file_path, new_photo_path)  # Загружаем файл на диск
-    await message.answer("Фото успешно заменено!")
+    await message.answer("Фото успешно заменено!", parse_mode="HTML")
 
 
 @router.callback_query(F.data == "product_search")
@@ -45,7 +45,7 @@ async def handle_product_search(callback_query: types.CallbackQuery):
     await bot.edit_message_media(media=media,
                                  chat_id=callback_query.message.chat.id,
                                  message_id=callback_query.message.message_id,
-                                 reply_markup=main_menu_key
+                                 reply_markup=main_menu_key, parse_mode="HTML"
                                  )
 
 
@@ -58,10 +58,10 @@ class ProductSearchForm(StatesGroup):
 async def handle_edit_product_search_command(message: Message, state: FSMContext):
     """Редактирование информации: Подбор товара"""
     if message.from_user.id == ADMIN_USER_ID:
-        await message.answer("Введите новый текст, используя разметку HTML.")
+        await message.answer("Введите новый текст, используя разметку HTML.", parse_mode="HTML")
         await state.set_state(ProductSearchForm.product_search_text)
     else:
-        await message.reply("У вас нет прав на выполнение этой команды.")
+        await message.reply("У вас нет прав на выполнение этой команды.", parse_mode="HTML")
 
 
 # Обработчик текстовых сообщений (для админа, чтобы обновить информацию)
@@ -71,7 +71,7 @@ async def handle_update_product_search_info(message: Message, state: FSMContext)
     bot_info = text
     save_bot_info(bot_info,
                   file_path="messages/selection_goods_analyst_sale_marketplaces_messages.json")  # Сохраняем информацию в JSON
-    await message.reply("Информация обновлена.")
+    await message.reply("Информация обновлена.", parse_mode="HTML")
     await state.clear()
 
 

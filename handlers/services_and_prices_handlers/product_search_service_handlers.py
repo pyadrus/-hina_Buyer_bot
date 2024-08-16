@@ -25,7 +25,7 @@ async def product_search_service_handlers(callback_query: types.CallbackQuery):
         chat_id=callback_query.message.chat.id,
         message_id=callback_query.message.message_id,
         caption=data,
-        reply_markup=main_menu_key
+        reply_markup=main_menu_key, parse_mode="HTML"
     )
 
 
@@ -38,10 +38,10 @@ class Formservices_search_in_china(StatesGroup):
 async def edit_search_in_china(message: Message, state: FSMContext):
     """Редактирование информации: Подбор товара"""
     if message.from_user.id == ADMIN_USER_ID:
-        await message.answer("Введите новый текст, используя разметку HTML.")
+        await message.answer("Введите новый текст, используя разметку HTML.", parse_mode="HTML")
         await state.set_state(Formservices_search_in_china.text_search_in_china)
     else:
-        await message.reply("У вас нет прав на выполнение этой команды.")
+        await message.reply("У вас нет прав на выполнение этой команды.", parse_mode="HTML")
 
 
 # Обработчик текстовых сообщений (для админа, чтобы обновить информацию)
@@ -50,7 +50,7 @@ async def update_info(message: Message, state: FSMContext):
     text = message.html_text
     bot_info = text
     save_bot_info(bot_info, file_path="messages/product_search_service_messages.json")  # Сохраняем информацию в JSON
-    await message.reply("Информация обновлена.")
+    await message.reply("Информация обновлена.", parse_mode="HTML")
     await state.clear()
 
 

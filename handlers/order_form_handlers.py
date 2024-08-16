@@ -25,7 +25,7 @@ async def order_form_handlers_handlers(callback_query: types.CallbackQuery):
 
     document = FSInputFile('messages/Бланк_заказа_ChinaBuyer.xlsx')
     await bot.send_document(chat_id=callback_query.message.chat.id, document=document, reply_markup=main_menu_key,
-                            caption=data)
+                            caption=data, parse_mode="HTML")
 
 
 class Formedit_order_form(StatesGroup):
@@ -37,10 +37,10 @@ class Formedit_order_form(StatesGroup):
 async def edit_order_form(message: Message, state: FSMContext):
     """Редактирование информации: 🗒 Бланк заказа"""
     if message.from_user.id == ADMIN_USER_ID:
-        await message.answer("Введите новый текст, используя разметку HTML.")
+        await message.answer("Введите новый текст, используя разметку HTML.", parse_mode="HTML")
         await state.set_state(Formedit_order_form.text_edit_order_form)
     else:
-        await message.reply("У вас нет прав на выполнение этой команды.")
+        await message.reply("У вас нет прав на выполнение этой команды.", parse_mode="HTML")
 
 
 # Обработчик текстовых сообщений (для админа, чтобы обновить информацию)
@@ -49,7 +49,7 @@ async def update_info(message: Message, state: FSMContext):
     text = message.html_text
     bot_info = text
     save_bot_info(bot_info, file_path="messages/order_form_handlers_messages.json")  # Сохраняем информацию в JSON
-    await message.reply("Информация обновлена.")
+    await message.reply("Информация обновлена.", parse_mode="HTML")
     await state.clear()
 
 
